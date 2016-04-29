@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Basic Template">
+    <meta name="author" content="Yoel Monzon">
+
+    <title>Styde | VueJS</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="vue.js"></script>
+
+  </head>
+
+  <body id="app">
+    <div class="col-md-4 col-md-offset-4">
+
+      <template v-if="name">
+        <h1>
+          {{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }} {{ name }}</h1>
+        <p>Espero que disfrutes tu vista</p>
+        <p>Tu nombre al reves es: {{ name.split('').reverse().join('') | lowercase }}</p>
+      </template>
+      <template v-else>
+        <p>Por favor escribe tu nombre:</p>
+      </template>
+
+      <input type="text" v-model="name" class="form-control">
+      
+      <br>
+      
+      <template v-if="(name == '' || name.length < 2)">
+        <ul class="alert alert-danger" >
+          <li v-if="name == ''">Este campo es obligatorio</li>
+          <li v-if="name.length < 2"> El nombre no es valido</li>
+        </ul>
+      </template>
+      
+      <hr>
+      <pre>
+        {{ $data | json }}
+      </pre>
+    </div>
+
+    <script type="text/javascript">
+      new Vue({
+        el: '#app',
+        data: {
+          name: '',
+          gender: 'm'
+        }
+      })
+    </script>
+  </body>
+</html>
