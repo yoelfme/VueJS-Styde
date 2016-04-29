@@ -32,6 +32,10 @@
 
       <input type="text" v-model="name" class="form-control">
       
+      <label for="gender">Ingresa tu genero:</label>
+      <input type="radio" v-model="gender" value="m"> Masculino
+      <input type="radio" v-model="gender" value="f"> Femenino
+
       <br>
       
       <template v-if="(name == '' || name.length < 2)">
