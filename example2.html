@@ -40,7 +40,7 @@
         <br>
 
         <p v-show="name">
-          <button type="submit" class="btn btn-primary">Registrate</button>
+          <button type="submit" class="btn btn-primary" @click.prevent="signUp">Registrate</button>
         </p>
       </form>
 
@@ -64,6 +64,11 @@
         data: {
           name: '',
           gender: 'm'
+        },
+        methods: {
+          signUp: function () {
+            alert('Singin up...')
+          }
         }
       })
     </script>
