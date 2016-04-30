@@ -44,8 +44,8 @@
         <p>
           Respuesta: <strong>{{ years_php }}</strong>
 
-          <button type="button" class="btn" @click="years_php++">+</button>
-          <button type="button" class="btn" @click="years_php--">-</button>
+          <button type="button" class="btn" @click="setYears(1)">+</button>
+          <button type="button" class="btn" @click="setYears(-1)">-</button>
         </p>
 
         <p v-show="name">
@@ -86,6 +86,9 @@
             if (logout) {
               alert('Saliendo del sistema...')
             }
+          },
+          setYears: function (quantity) {
+            this.years_php = (this.years_php == 0 && quantity <= -1 ? 0 : this.years_php + quantity)
           }
         }
       })
