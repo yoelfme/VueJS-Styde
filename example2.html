@@ -29,14 +29,21 @@
       <template v-else>
         <p>Por favor escribe tu nombre:</p>
       </template>
-
-      <input type="text" v-model="name" class="form-control">
+  
+      <form action="">
+        <input type="text" v-model="name" class="form-control">
       
-      <label for="gender">Ingresa tu genero:</label>
-      <input type="radio" v-model="gender" value="m"> Masculino
-      <input type="radio" v-model="gender" value="f"> Femenino
+        <label for="gender">Ingresa tu genero:</label>
+        <input type="radio" v-model="gender" value="m"> Masculino
+        <input type="radio" v-model="gender" value="f"> Femenino
+        
+        <br>
 
-      <br>
+        <p v-show="name">
+          <button type="submit" class="btn btn-primary">Registrate</button>
+        </p>
+      </form>
+
       
       <template v-if="(name == '' || name.length < 2)">
         <ul class="alert alert-danger" >
