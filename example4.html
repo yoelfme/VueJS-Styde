@@ -46,13 +46,31 @@
 
           <button type="button"
             :class="{btn: true, 'btn-danger': years_php > 10 }"
-            :style="getAddYearButtonStyles()"
-            @click="setYears(1)">+</button>
+            :style="getAddYearButtonStyles('php')"
+            @click="setYears('php', 1)">+</button>
 
           <button type="button" 
               class="btn" 
               :disabled="this.years_php == 0"
-              @click="setYears(-1)">-</button>
+              @click="setYears('php', -1)">-</button>
+        </p>
+
+        <p>
+          ¿Cuantos años de experiencia tienes con Javascript?
+        </p>
+
+        <p>
+          Respuesta: <strong>{{ years_javascript}}</strong>
+
+          <button type="button"
+            :class="{btn: true, 'btn-danger': years_javascript > 10 }"
+            :style="getAddYearButtonStyles('javascript')"
+            @click="setYears('javascript', 1)">+</button>
+
+          <button type="button" 
+              class="btn" 
+              :disabled="this.years_javascript == 0"
+              @click="setYears('javascript', -1)">-</button>
         </p>
 
         <p v-show="name">
@@ -82,7 +100,8 @@
         data: {
           name: '',
           gender: 'm',
-          years_php: 0
+          years_php: 0,
+          years_javascript: 0
         },
         methods: {
           signUp: function (logout, event) {
@@ -94,12 +113,13 @@
               alert('Saliendo del sistema...')
             }
           },
-          setYears: function (quantity) {
-            this.years_php = (this.years_php == 0 && quantity <= -1 ? 0 : this.years_php + quantity)
+          setYears: function (tech, quantity) {
+            var value = this['years_' + tech];
+            this['years_' + tech] = (value == 0 && quantity <= -1 ? 0 : value + quantity)
           },
-          getAddYearButtonStyles: function () {
+          getAddYearButtonStyles: function (tech) {
             return {
-              'font-size': 10 + this.years_php + 'px'
+              'font-size': 10 + this['years_' + tech] + 'px'
             }
           }
         }
