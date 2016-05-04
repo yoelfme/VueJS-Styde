@@ -21,7 +21,7 @@
     <div class="col-md-4 col-md-offset-4">
 
       <template v-if="name">
-        <wellcome-message></wellcome-message>
+        <wellcome-message :name="name" :gender="gender"></wellcome-message>
 
         <p>Espero que disfrutes tu vista</p>
         <p>Tu nombre al reves es: {{ name.split('').reverse().join('') | lowercase }}</p>
@@ -36,50 +36,9 @@
         <label for="gender">Ingresa tu genero:</label>
         <input type="radio" v-model="gender" value="m"> Masculino
         <input type="radio" v-model="gender" value="f"> Femenino
-
-        <hello-world></hello-world>
         
-        <p>
-          ¿Cuantos años de experiencia tienes con PHP?
-        </p>
-
-        <p>
-          Respuesta: <strong>{{ years_php }}</strong>
-
-          <button type="button"
-            :class="{btn: true, 'btn-danger': years_php > 10 }"
-            :style="getAddYearButtonStyles('php')"
-            @click="setYears('php', 1)">+</button>
-
-          <button type="button" 
-              class="btn" 
-              :disabled="this.years_php == 0"
-              @click="setYears('php', -1)">-</button>
-        </p>
-
-        <p>
-          ¿Cuantos años de experiencia tienes con Javascript?
-        </p>
-
-        <p>
-          Respuesta: <strong>{{ years_javascript}}</strong>
-
-          <button type="button"
-            :class="{btn: true, 'btn-danger': years_javascript > 10 }"
-            :style="getAddYearButtonStyles('javascript')"
-            @click="setYears('javascript', 1)">+</button>
-
-          <button type="button" 
-              class="btn" 
-              :disabled="this.years_javascript == 0"
-              @click="setYears('javascript', -1)">-</button>
-        </p>
-
-        <p v-show="name">
-          <button type="submit" class="btn btn-primary">Registrate</button>
-
-          <button type="button" class="btn btn-primary" @click="signUp(true, $event)">Registrate y sal del sistema</button>
-        </p>
+        <years-exp :years.sync="years_php" tech="PHP"></years-exp>
+        <years-exp :years.sync="years_javascript" tech="Javascript"></years-exp>
       </form>
 
       
@@ -97,17 +56,50 @@
     </div>
 
     <script type="text/template" id="wellcome_template">
-      <h1>{{ $parent.gender == 'm' ? 'Bienvenido' : 'Bienvenida' }} {{ $parent.name }}</h1>
+      <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }} {{ name }}</h1>
     </script>
+
+    <script type="text/template" id="years_template">
+      <p>
+        ¿Cuantos años de experiencia tienes con {{ tech }}?
+      </p>
+
+      <p>
+        Respuesta: <strong>{{ years }}</strong>
+
+        <button type="button"
+          :class="{btn: true, 'btn-danger': years > 10 }"
+          @click="add">+</button>
+
+        <button type="button" 
+            class="btn" 
+            :disabled="this.years == 0"
+            @click="sub">-</button>
+      </p>
+    </script>
+
 
     <script type="text/javascript">
 
-      Vue.component('hello-world', {
-        template: '<h2>Hello world</h2>'
-      })
-
       Vue.component('wellcome-message', {
-        template: '#wellcome_template'
+        template: '#wellcome_template',
+        props: {
+          gender: {type: String, required: false, default: 'm'},
+          name: {type: String, required: true}
+        }
+      });
+
+      Vue.component('years-exp', {
+        template: "#years_template",
+        methods: {
+          add: function () {
+            this.years++;
+          },
+          sub: function () {
+            this.years--;
+          }
+        },
+        props: ['years', 'tech']
       })
 
       new Vue({
@@ -127,10 +119,6 @@
             if (logout) {
               alert('Saliendo del sistema...')
             }
-          },
-          setYears: function (tech, quantity) {
-            var value = this['years_' + tech];
-            this['years_' + tech] = (value == 0 && quantity <= -1 ? 0 : value + quantity)
           },
           getAddYearButtonStyles: function (tech) {
             return {
