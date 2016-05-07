@@ -24,7 +24,7 @@
         <h1>{{ welcome_message }} {{ name }}</h1>
 
         <p>Espero que disfrutes tu vista</p>
-        <p>Tu nombre al reves es: {{ name.split('').reverse().join('') | lowercase }}</p>
+        <p>Tu nombre al reves es: {{ reverse_name | lowercase }}</p>
       </template>
       <template v-else>
         <p>Por favor escribe tu nombre:</p>
@@ -90,6 +90,8 @@
             class="btn" 
             :disabled="this.years == 0"
             @click="sub">-</button>
+
+        {{ experience }}
       </p>
     </script>
 
@@ -106,7 +108,20 @@
             this.years--;
           }
         },
-        props: ['years', 'tech']
+        props: ['years', 'tech'],
+        computed: {
+          experience: function () {
+            if (this.years > 5) {
+              return 'Experto';
+            } else if (this.years > 2) {
+              return 'Intermedio';
+            } else if (this.years >= 1) {
+              return 'Principiante';
+            }
+
+            return 'Ninguna';
+          }
+        }
       })
 
       new Vue({
@@ -135,6 +150,9 @@
             }
 
             return 'Welcome';
+          },
+          reverse_name: function () {
+            return this.name.split('').reverse().join('')
           },
           name: function () {
             if (this.first_name || this.last_name) {
