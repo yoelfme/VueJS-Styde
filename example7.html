@@ -31,7 +31,10 @@
       </template>
   
       <form action="" @submit.prevent="signUp(false, $event)">
-        <input type="text" v-model="name" class="form-control">
+        <label for="">Primer Nombre</label>
+        <input type="text" v-model="first_name" class="form-control">
+        <label for="">Apellido</label>
+        <input type="text" v-model="last_name" class="form-control">
         <br>
         <template v-if="(name == '' || name.length < 2)">
           <ul class="alert alert-danger" >
@@ -109,7 +112,8 @@
       new Vue({
         el: '#app',
         data: {
-          name: '',
+          first_name: '',
+          last_name: '',
           gender: 'm',
           spanish: true,
           years_php: 0,
@@ -131,6 +135,18 @@
             }
 
             return 'Welcome';
+          },
+          name: function () {
+            if (this.first_name || this.last_name) {
+              return this.first_name + ' ' + this.last_name;
+            }
+
+            return '';
+          }
+        },
+        watch: {
+          first_name: function (first_name) {
+            console.log(first_name);
           }
         },
         methods: {
