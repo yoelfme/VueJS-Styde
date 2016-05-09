@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Basic Template">
+    <meta name="author" content="Yoel Monzon">
+
+    <title>Styde | VueJS</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="vue.js"></script>
+
+  </head>
+
+  <body id="app">
+    <div class="col-md-4 col-md-offset-4">
+
+      <template v-if="name">
+        <h1>{{ welcome_message }} {{ name | ucwords }}</h1>
+
+        <p>Espero que disfrutes tu vista</p>
+        <p>Tu nombre al reves es: {{ reverse_name | lowercase }}</p>
+      </template>
+      <template v-else>
+        <p>Por favor escribe tu nombre:</p>
+      </template>
+  
+      <form action="" @submit.prevent="signUp(false, $event)">
+        <label for="">Primer Nombre</label>
+        <input type="text" v-model="first_name" class="form-control">
+        <label for="">Apellido</label>
+        <input type="text" v-model="last_name" class="form-control">
+        <br>
+        <template v-if="(name == '' || name.length < 2)">
+          <ul class="alert alert-danger" >
+            <li v-if="name == ''">Este campo es obligatorio</li>
+            <li v-if="name.length < 2"> El nombre no es valido</li>
+          </ul>
+        </template>
+      
+        <label for="gender">Ingresa tu genero:</label>
+        <input type="radio" v-model="gender" value="m"> Masculino
+        <input type="radio" v-model="gender" value="f"> Femenino
+
+        <label>
+          Hablas español?
+          <input type="checkbox" v-model="spanish">
+        </label>
+
+        <template v-for="tech in techs">
+          <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>  
+        </template>
+      </form>
+
+      <hr>
+
+      <h4>Tienes experiencia en alguna otra tecnologia, agregala?</h3>
+      <form @submit.prevent="addTech" class="form">
+        <input type="text" v-model="new_tech.name" class="form-control">
+        <br>
+        <button type="submit" class="btn btn-primary">Agregar</button>
+      </form>
+
+      <hr>
+      
+      <hr>
+      <pre>
+        {{ $data | json }}
+      </pre>
+    </div>
+
+    <script type="text/template" id="years_template">
+      <p>
+        ¿Cuantos años de experiencia tienes con {{ tech }}?
+      </p>
+
+      <p>
+        Respuesta: <strong>{{ years }}</strong>
+
+        <button type="button"
+          :class="{btn: true, 'btn-danger': years > 10 }"
+          @click="add">+</button>
+
+        <button type="button" 
+            class="btn" 
+            :disabled="this.years == 0"
+            @click="sub">-</button>
+
+        {{ experience }}
+      </p>
+    </script>
+
+
+    <script type="text/javascript">
+
+      Vue.filter('ucwords', function (value) {
+        return value.split(' ')
+          .map(function (word) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+          }).join(' ');
+      });
+
+      Vue.component('years-exp', {
+        template: "#years_template",
+        methods: {
+          add: function () {
+            this.years++;
+          },
+          sub: function () {
+            this.years--;
+          }
+        },
+        props: ['years', 'tech'],
+        computed: {
+          experience: function () {
+            if (this.years > 5) {
+              return 'Experto';
+            } else if (this.years > 2) {
+              return 'Intermedio';
+            } else if (this.years >= 1) {
+              return 'Principiante';
+            }
+
+            return 'Ninguna';
+          }
+        }
+      })
+
+      new Vue({
+        el: '#app',
+        data: {
+          first_name: '',
+          last_name: '',
+          gender: 'm',
+          spanish: true,
+          years_php: 0,
+          years_javascript: 0,
+          techs: [
+            {name: 'PHP', years: 0},
+            {name: 'Javascript', years: 0},
+            {name: 'Ruby', years: 0},
+          ],
+          new_tech: {
+            name: '',
+            years: 0
+          }
+        },
+        computed: {
+          welcome_message: function () {
+            if (this.spanish) {
+              return this.gender == 'm' ? 'Bienvenido' : 'Bienvenida';
+            }
+
+            return 'Welcome';
+          },
+          reverse_name: function () {
+            return this.name.split('').reverse().join('')
+          },
+          name: function () {
+            if (this.first_name || this.last_name) {
+              return this.first_name + ' ' + this.last_name;
+            }
+
+            return '';
+          }
+        },
+        watch: {
+          first_name: function (first_name) {
+            console.log(first_name);
+          }
+        },
+        methods: {
+          signUp: function (logout, event) {
+            event.preventDefault()
+
+            alert(this.name + ', por favor espera mientras te registramos');
+
+            if (logout) {
+              alert('Saliendo del sistema...')
+            }
+          },
+          getAddYearButtonStyles: function (tech) {
+            return {
+              'font-size': 10 + this['years_' + tech] + 'px'
+            }
+          },
+          addTech: function () {
+            this.techs.push(this.new_tech);
+
+            this.new_tech = {name: '', years: 0};
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
