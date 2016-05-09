@@ -24,7 +24,7 @@
         <h1>{{ welcome_message }} {{ name | ucwords }}</h1>
 
         <p>Espero que disfrutes tu vista</p>
-        <p>Tu nombre al reves es: {{ reverse_name | lowercase }}</p>
+        <p>Tu nombre al reves es: {{ name | reverse | lowercase }}</p>
       </template>
       <template v-else>
         <p>Por favor escribe tu nombre:</p>
@@ -51,10 +51,6 @@
           Hablas español?
           <input type="checkbox" v-model="spanish">
         </label>
-
-        <template v-for="tech in techs">
-          <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>  
-        </template>
       </form>
 
       <hr>
@@ -63,14 +59,47 @@
       <form @submit.prevent="addTech" class="form">
         <input type="text" v-model="new_tech.name" class="form-control">
         <br>
+
+        <label for="type">Tipo:</label>
+        <input type="radio" v-model="new_tech.type" value="backend"> Backend
+        <input type="radio" v-model="new_tech.type" value="frontend"> Frontend
+
+        <br>
         <button type="submit" class="btn btn-primary">Agregar</button>
       </form>
 
       <hr>
+
+      <template v-for="tech in techs">
+        <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>  
+      </template>
+
+      <hr>
       
-      <h3>Tienes experiencia en:</h3>
+      <h3>Tienes experiencia con backend en:</h3>
       <ul>
-        <li v-for="tech in techs | orderBy 'years' -1 | years">
+        <li v-for="tech in techs | orderBy 'years' -1 | years | haveExperienceBackend">
+          {{ tech.name }}
+        </li>
+      </ul>
+
+      <h3>Tienes experiencia con frontend en:</h3>
+      <ul>
+        <li v-for="tech in techs | orderBy 'years' -1 | years | haveExperienceFrontend">
+          {{ tech.name }}
+        </li>
+      </ul>
+
+      <h3>Eres experto en:</h3>
+      <ul>
+        <li v-for="tech in techs | orderBy 'years' -1 | areExpert">
+          {{ tech.name }}
+        </li>
+      </ul>
+
+      <h3>No tienes experiencia en:</h3>
+      <ul>
+        <li v-for="tech in techs | orderBy 'years' -1 | haveNoExperience">
           {{ tech.name }}
         </li>
       </ul>
@@ -104,6 +133,10 @@
 
     <script type="text/javascript">
 
+      Vue.filter('reverse', function (value) {
+        return value.split('').reverse().join('');
+      });
+
       Vue.filter('ucwords', function (value) {
         return value.split(' ')
           .map(function (word) {
@@ -114,8 +147,35 @@
       Vue.filter('years', function (techs) {
         return techs.filter(function (tech) {
           return tech.years > 0;
-        })
+        });
       });
+
+      Vue.filter('haveExperienceBackend', function (techs) {
+        return techs.filter(function (tech) {
+          return tech.type === 'backend';
+        });
+      });
+
+      Vue.filter('haveExperienceFrontend', function (techs) {
+        return techs.filter(function (tech) {
+          return tech.type === 'frontend';
+        });
+      });
+
+      Vue.filter('haveNoExperience', function (techs) {
+        console.log('hola');
+        return techs.filter(function (tech) {
+          return tech.years === 0;
+        });
+      });
+
+      Vue.filter('areExpert', function (techs) {
+        return techs.filter(function (tech) {
+          return tech.years >= 5;
+        });
+      });
+
+
 
       Vue.component('years-exp', {
         template: "#years_template",
@@ -153,13 +213,14 @@
           years_php: 0,
           years_javascript: 0,
           techs: [
-            {name: 'PHP', years: 0},
-            {name: 'Javascript', years: 0},
-            {name: 'Ruby', years: 0},
+            {name: 'PHP', years: 0, type: 'backend'},
+            {name: 'Javascript', years: 0, type: 'frontend'},
+            {name: 'Ruby', years: 0, type: 'backend'},
           ],
           new_tech: {
             name: '',
-            years: 0
+            years: 0,
+            type: 'backend'
           }
         },
         computed: {
@@ -169,9 +230,6 @@
             }
 
             return 'Welcome';
-          },
-          reverse_name: function () {
-            return this.name.split('').reverse().join('')
           },
           name: function () {
             if (this.first_name || this.last_name) {
