@@ -68,7 +68,13 @@
 
       <hr>
       
-      <hr>
+      <h3>Tienes experiencia en:</h3>
+      <ul>
+        <li v-for="tech in techs | orderBy 'years' -1 | years">
+          {{ tech.name }}
+        </li>
+      </ul>
+
       <pre>
         {{ $data | json }}
       </pre>
@@ -103,6 +109,12 @@
           .map(function (word) {
             return word.charAt(0).toUpperCase() + word.slice(1);
           }).join(' ');
+      });
+
+      Vue.filter('years', function (techs) {
+        return techs.filter(function (tech) {
+          return tech.years > 0;
+        })
       });
 
       Vue.component('years-exp', {
