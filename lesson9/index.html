@@ -43,7 +43,13 @@
                             </td>
                         </template>
                         <template v-else>
-                            <td><input type="text" v-model="note.category_id" class="form-control"></td>
+                            <td>
+                                <select v-model="note.category_id" class="form-control">
+                                    <option v-for="category in categories" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </td>
                             <td><input type="text" v-model="note.note" class="form-control"></td>
                             <td>
                                 <a href="" @click.prevent="updateNote(note)">
