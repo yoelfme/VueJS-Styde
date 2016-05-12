@@ -27,40 +27,18 @@
                     <tr>
                         <th>Categoria</th>
                         <th>Nota</th>
-                        <th>&nbsp;</th>
+                        <th style="width: 50px;">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Laravel</td>
-                        <td>Laravel 5.1 es LTS</td>
+                    <tr v-for="note in notes">
+                        <td>{{ note.category_id | category }}</td>
+                        <td>{{ note.note }}</td>
                         <td>
                             <a href=""><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Laravel</td>
-                        <td>Laravel 5.1 es LTS</td>
-                        <td>
-                            <a href=""><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Laravel</td>
-                        <td>Laravel 5.1 es LTS</td>
-                        <td>
-                            <a href=""><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Laravel</td>
-                        <td>Laravel 5.1 es LTS</td>
-                        <td>
-                            <a href=""><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                            <a href=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                            <a href="" >
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
