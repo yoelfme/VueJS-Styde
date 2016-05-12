@@ -39,7 +39,12 @@ var vm = new Vue({
                 name: 'Vue.js'
             }
         ]
-    },    
+    },
+    methods: {
+        deleteNote: function (note) {
+            this.notes.$remove(note);
+        }
+    },
     filters: {
         category: function (id) {
             var category =  findById(this.categories, id)
