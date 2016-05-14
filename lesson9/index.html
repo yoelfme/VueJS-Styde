@@ -32,6 +32,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="note in notes" :note.sync="note" :categories="categories" is="note-row"></tr>
+                    <tr>
+                        <td><select-category :categories="categories" :id.sync="new_note.category_id"></select-category></td>
+                        <td><input type="text" v-model="new_note.note" class="form-control"></td>
+                        <td>
+                            <a @click="createNote()">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>  
         </div>
@@ -39,6 +48,7 @@
 
     <template id="select_category_tpl">
         <select v-model="id" class="form-control">
+            <option value="">- Elija categoria -</option>
             <option v-for="category in categories" :value="category.id">
                 {{ category.name }}
             </option>
