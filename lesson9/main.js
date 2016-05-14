@@ -8,9 +8,10 @@ function findById(items, id) {
     return null;
 }
 
-Vue.filter('category', function (id) {
-    
-});
+Vue.component('select-category', {
+    template: '#select_category_tpl',
+    props: ['categories', 'id']
+})
 
 var vm = new Vue({
     el: 'body',
